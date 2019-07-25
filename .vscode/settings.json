@@ -1,0 +1,9 @@
+{
+  "tslint.autoFixOnSave": true,
+  "editor.formatOnSave": true,
+  "javascript.format.enable": false,
+  "files.insertFinalNewline": true,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false
+}

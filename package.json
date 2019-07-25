@@ -1,0 +1,36 @@
+{
+  "name": "graphql-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./dist/index.js",
+    "build": "tslint 'src/**/*.{ts,tsx}' && tsc",
+    "dev": "nodemon src/index.ts",
+    "generate": "graphql-codegen"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.7.1",
+    "graphql": "^14.4.2",
+    "graphql-middleware": "^3.0.2",
+    "lodash": "^4.17.15",
+    "merge-graphql-schemas": "^1.6.2-bdaf070.0"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^1.4.0",
+    "@graphql-codegen/typescript": "^1.4.0",
+    "@graphql-codegen/typescript-operations": "^1.4.0",
+    "@graphql-codegen/typescript-resolvers": "^1.4.0",
+    "@types/graphql": "^14.2.3",
+    "@types/lodash": "^4.14.136",
+    "nodemon": "^1.19.1",
+    "ts-node": "^8.3.0",
+    "tslint": "^5.18.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "typescript": "^3.5.3"
+  }
+}
