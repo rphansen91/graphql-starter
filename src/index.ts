@@ -2,9 +2,8 @@ import { ApolloServer } from 'apollo-server';
 import { applyMiddleware } from 'graphql-middleware';
 import { getApolloContext } from './context';
 import { authentication } from './middlewares/auth';
-import { permissions } from './middlewares/permissions';
 import { logger } from './middlewares/log';
-import schema from './schema';
+import schema from './gql/schema';
 
 const PORT = Number(process.env.PORT) || 8080;
 
@@ -13,12 +12,7 @@ main(PORT);
 async function main(port: number) {
   try {
     const graphqlContext = getApolloContext();
-    const graphqlSchema = applyMiddleware(
-      schema,
-      logger,
-      authentication,
-      permissions,
-    );
+    const graphqlSchema = applyMiddleware(schema, logger, authentication);
     const server = new ApolloServer({
       context: graphqlContext,
       schema: graphqlSchema,

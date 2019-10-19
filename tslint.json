@@ -1,8 +1,6 @@
 {
   "extends": "tslint-config-airbnb",
   "linterOptions": {
-    "exclude": [
-      "./src/**/*.generated.tsx"
-    ]
+    "exclude": ["./src/**/*.generated.ts"]
   }
 }

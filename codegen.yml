@@ -1,7 +1,7 @@
-schema: ./src/**/*.schema.ts
+schema: ./src/**/schema.ts
 overwrite: true
 generates:
-  ./src/graphql.generated.tsx:
+  ./src/graphql.generated.ts:
     plugins:
       - typescript
       - typescript-operations

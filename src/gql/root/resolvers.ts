@@ -1,5 +1,5 @@
-import { QueryResolvers, MutationResolvers } from '../graphql.generated';
-import { IContext } from '../context';
+import { QueryResolvers, MutationResolvers } from '../../graphql.generated';
+import { IContext } from '../../context';
 
 export const rootQueryResolvers: QueryResolvers<IContext> = {
   empty: () => '',
