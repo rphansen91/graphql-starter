@@ -11,10 +11,9 @@ main(PORT);
 
 async function main(port: number) {
   try {
-    const graphqlContext = getApolloContext();
     const graphqlSchema = applyMiddleware(schema, logger, authentication);
     const server = new ApolloServer({
-      context: graphqlContext,
+      context: getApolloContext,
       schema: graphqlSchema,
     });
     const { url } = await server.listen(port);

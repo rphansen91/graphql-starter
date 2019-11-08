@@ -1,23 +1,22 @@
-import { ContextFunction } from 'apollo-server-core';
-import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
-import { ApolloStores } from './stores';
+import {
+  makeMongoStore,
+  connect,
+  mongoUri,
+  mongoDbName,
+  Db,
+} from './stores/mongo';
 
-export interface IContext {
-  authStore: ReturnType<ApolloStores['getAuthStore']>;
-  dataStore: ReturnType<ApolloStores['getDataStore']>;
+export type IContext = ReturnType<typeof getContext>;
+
+function getContext(db: Db) {
+  return {
+    ...makeMongoStore(db),
+  };
 }
 
-export function getApolloContext(): ContextFunction<ExpressContext> {
-  // Runs on server boot
-  const apolloStoreProvider = new ApolloStores();
-
-  return async function (event): Promise<IContext> {
-    // Runs on every request
-    const authStore = await apolloStoreProvider.getAuthStore(event);
-    const dataStore = await apolloStoreProvider.getDataStore(event);
-    return {
-      authStore,
-      dataStore,
-    };
-  };
+export async function getApolloContext(): Promise<IContext> {
+  // Runs on every request
+  const connection = await connect(mongoUri);
+  const db = connection.db(mongoDbName);
+  return getContext(db);
 }

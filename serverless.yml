@@ -1,0 +1,74 @@
+service: api-coin-tracker
+
+package:
+  exclude:
+    - src/**
+
+plugins:
+  - serverless-webpack
+  - serverless-domain-manager
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+
+functions:
+  eventScript:
+    handler: lambda.eventScript
+    events:
+      - http:
+          path: /events.js
+          method: any
+          cors:
+            origin: "*"
+  dropRedirect:
+    handler: lambda.dropRedirect
+    events:
+      - http:
+          path: /{id}
+          method: GET
+          request:
+            parameters:
+              paths:
+                id: true
+          cors:
+            origin: "*"
+      - http:
+          path: /drop/redirect/{id}
+          method: GET
+          request:
+            parameters:
+              paths:
+                id: true
+          cors:
+            origin: "*"
+  dropClick:
+    handler: lambda.dropClick
+    events:
+      - http:
+          path: /drop/click/{id}
+          method: GET
+          request:
+            parameters:
+              paths:
+                id: true
+          cors:
+            origin: "*"
+  dropConvert:
+    handler: lambda.dropConvert
+    events:
+      - http:
+          path: /drop/convert/{id}
+          method: GET
+          request:
+            parameters:
+              paths:
+                id: true
+          cors:
+            origin: "*"
+
+custom:
+  customDomain:
+    certificateName: "*.coinapp.co"
+    domainName: t.coinapp.co
+    createRoute53Record: true

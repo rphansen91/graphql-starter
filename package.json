@@ -1,12 +1,15 @@
 {
-  "name": "graphql-server",
+  "name": "coin-tracker",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "sdk/events.umd.js",
+  "module": "sdk/events.es5.js",
+  "typings": "sdk/events.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./dist/index.js",
     "build": "tslint 'src/**/*.{ts,tsx}' && tsc",
+    "build:sdk": "rm -rf sdk && tsc -p ./tsconfig.rollup.json --module commonjs && rollup -c rollup.config.ts",
     "dev": "nodemon src/index.ts",
     "generate": "graphql-codegen"
   },
@@ -15,22 +18,39 @@
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^2.7.1",
+    "aws-lambda": "^0.1.2",
     "graphql": "^14.4.2",
     "graphql-middleware": "^3.0.2",
     "lodash": "^4.17.15",
-    "merge-graphql-schemas": "^1.6.2-bdaf070.0"
+    "merge-graphql-schemas": "^1.6.2-bdaf070.0",
+    "mongodb": "^3.3.3"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.4.0",
     "@graphql-codegen/typescript": "^1.4.0",
     "@graphql-codegen/typescript-operations": "^1.4.0",
     "@graphql-codegen/typescript-resolvers": "^1.4.0",
+    "@types/aws-lambda": "^8.10.33",
     "@types/graphql": "^14.2.3",
     "@types/lodash": "^4.14.136",
+    "@types/mongodb": "^3.3.6",
     "nodemon": "^1.19.1",
+    "raw-loader": "^3.1.0",
+    "rollup": "^1.25.2",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-typescript2": "^0.24.3",
+    "rollup-plugin-uglify": "^6.0.3",
+    "serverless": "^1.48.3",
+    "serverless-domain-manager": "^3.2.6",
+    "serverless-webpack": "^5.3.1",
+    "ts-loader": "^6.2.1",
     "ts-node": "^8.3.0",
     "tslint": "^5.18.0",
     "tslint-config-airbnb": "^5.11.1",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "webpack": "^4.41.2"
   }
 }
