@@ -21,7 +21,7 @@ functions:
           method: any
           cors:
             origin: "*"
-  eventScript:
+  eventScriptMap:
     handler: lambda.eventScriptMap
     events:
       - http:
