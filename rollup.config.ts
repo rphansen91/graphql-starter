@@ -19,7 +19,7 @@ export default {
       file: 'sdk/events.js',
       name: libraryName,
       format: 'iife',
-      sourcemap: true,
+      sourcemap: false,
     },
   ],
   external: [],
@@ -61,7 +61,7 @@ export default {
     }),
 
     // Resolve source maps to the original source
-    sourceMaps(),
+    // sourceMaps(),
 
     uglify(),
   ],
