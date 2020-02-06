@@ -23,7 +23,7 @@ function makeCoinTracker(_a) {
 }
 var w = window;
 var d = document;
-var apiUri = 'https://tracking.coinapp.co';
+var apiUri = 'https://t.coinapp.co';
 var logger = function () {
     var v = [];
     for (var _i = 0; _i < arguments.length; _i++) {

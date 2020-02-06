@@ -21,6 +21,14 @@ functions:
           method: any
           cors:
             origin: "*"
+  eventScript:
+    handler: lambda.eventScriptMap
+    events:
+      - http:
+          path: /events.js.map
+          method: any
+          cors:
+            origin: "*"
   dropRedirect:
     handler: lambda.dropRedirect
     events:

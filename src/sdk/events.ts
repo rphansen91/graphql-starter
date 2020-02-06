@@ -26,7 +26,7 @@ function makeCoinTracker({ w, withOptions, trackEvent }: ICoinTrackerDeps) {
 
 const w = window;
 const d = document;
-const apiUri = 'https://tracking.coinapp.co';
+const apiUri = 'https://t.coinapp.co';
 const logger: ILogger = (...v) => console.log('COIN Tracker', ...v);
 const withOptions = makeWithOptions({ w, d, logger, parser: parse });
 const trackEvent = makeTrackEvent({ w, d, apiUri, logger });

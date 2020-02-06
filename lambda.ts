@@ -6,6 +6,8 @@ import {
 } from 'aws-lambda';
 import get from 'lodash/get';
 import { getApolloContext, IContext } from './src/context';
+import stopwatch from './src/utils/stopwatch';
+import { ObjectID } from 'mongodb';
 
 interface RequestParams {
   id: string;
@@ -19,14 +21,46 @@ export const eventScript = (
   callback(null, sendEventScript());
 };
 
+export const eventScriptMap = (
+  event: APIGatewayProxyEvent,
+  context: Context,
+  callback: APIGatewayProxyCallback,
+) => {
+  callback(null, sendEventScriptMap());
+};
+
+export const advancedDropOptIn = handleRequest(
+  async ({ id }, { coinDropsAdvancedOptIn }) => {
+    await coinDropsAdvancedOptIn.findOneAndUpdate(
+      {
+        advancedId: new ObjectID(id),
+      },
+      {
+        $set: {},
+      },
+      { upsert: true, returnOriginal: false },
+    );
+    return { statusCode: 200, body: JSON.stringify({ success: true }) };
+  },
+  () => ({ statusCode: 200, body: JSON.stringify({ success: false }) }),
+);
+
 export const dropRedirect = handleRequest(
   async ({ id }, { withIdFilter, coinDrops }) => {
-    const { value } = await coinDrops.findOneAndUpdate(withIdFilter(id), {
-      $set: {
-        linkClicked: true,
-        linkClickedTime: new Date(),
+    console.log('Click redirect', { id });
+    const trackTime = stopwatch();
+    const { value } = await coinDrops.findOneAndUpdate(
+      withIdFilter(id),
+      {
+        $set: {
+          linkClicked: true,
+          linkClickedTime: new Date(),
+        },
       },
-    });
+      { w: 0, maxTimeMS: 1000 },
+    );
+    console.log('Drop found', trackTime());
+    console.log('Drop redirect', value);
     const location = withRedirectLink(id, value);
     const { host, hostname } = getLocation(location);
     console.log({ host, hostname });
@@ -72,6 +106,7 @@ function handleRequest(
     callback: APIGatewayProxyCallback,
   ) {
     try {
+      console.log('Request Headers', event.headers);
       context.callbackWaitsForEmptyEventLoop = false;
       const params = withRequestParams(event);
       const ctx = await getApolloContext();
@@ -133,6 +168,17 @@ function sendEventScript(): APIGatewayProxyResult {
       'Content-Type': 'application/javascript',
     },
     body: require('./sdk/events').default,
+  };
+}
+
+function sendEventScriptMap(): APIGatewayProxyResult {
+  return {
+    statusCode: 200,
+    headers: {
+      'Cache-Control': 'public, max-age=7200',
+      'Content-Type': 'application/javascript',
+    },
+    body: require('./sdk/events.js.map').default,
   };
 }
 
