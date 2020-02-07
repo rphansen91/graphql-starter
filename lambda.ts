@@ -8,7 +8,6 @@ import get from 'lodash/get';
 import { getApolloContext, IContext } from './src/context';
 import stopwatch from './src/utils/stopwatch';
 import { ObjectID } from 'mongodb';
-import nodeFetch from 'node-fetch';
 
 interface RequestParams {
   id: string;
@@ -46,9 +45,9 @@ export const eventPing = handleRequest(
       { upsert: true },
     );
     console.log('Updated tracker implementation', trackTime());
-    return { statusCode: 200, body: JSON.stringify({ success: true }) };
+    return sendImgPixel();
   },
-  () => ({ statusCode: 200, body: JSON.stringify({ success: false }) }),
+  () => sendImgPixel(),
 );
 
 export const advancedDropOptIn = handleRequest(
