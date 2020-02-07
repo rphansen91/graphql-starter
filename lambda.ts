@@ -210,13 +210,13 @@ function withRedirectCookie(id: string) {
   const expires = new Date(
     Date.now() + 1000 * 60 * 60 * 24 * 365,
   ).toUTCString();
-  return toCookieString({
+  return `${toCookieString({
     drop_id: id,
     Expires: expires,
     Domain: 'coinapp.co',
     Path: '/',
     SameSite: 'None',
-  });
+  })}; Secure`;
 }
 
 function toCookieString(cookies: any) {
