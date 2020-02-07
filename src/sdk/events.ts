@@ -21,6 +21,7 @@ function makeCoinTracker({ w, withOptions, trackEvent }: ICoinTrackerDeps) {
   const originalPush = w.coinTracker.push.bind(w.coinTracker);
   w.coinTracker.push = push;
   w.coinTracker.forEach(push);
+  w.coinTracker.push({ event: 'ping' });
   return w.coinTracker;
 }
 

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function makeTrackEvent(_a) {
-    var d = _a.d, apiUri = _a.apiUri, logger = _a.logger;
+    var w = _a.w, d = _a.d, apiUri = _a.apiUri, logger = _a.logger;
     function appendChild(element) {
         if (d.body) {
             d.body.appendChild(element);
@@ -19,6 +19,9 @@ function makeTrackEvent(_a) {
         img.src = src;
         appendChild(img);
     }
+    function addPingPixel(opts) {
+        appendImgPixel(apiUri + "/ping?url=" + w.location.href);
+    }
     function addLinkClickPixel(opts) {
         if (opts.drop_id) {
             appendImgPixel(apiUri + "/drop/click/" + opts.drop_id);
@@ -34,6 +37,8 @@ function makeTrackEvent(_a) {
             return;
         logger('Track event', opts);
         switch (opts && opts.event) {
+            case 'ping':
+                return addPingPixel(opts);
             case 'click':
                 return addLinkClickPixel(opts);
             case 'convert':

@@ -19,6 +19,7 @@ function makeCoinTracker(_a) {
     var originalPush = w.coinTracker.push.bind(w.coinTracker);
     w.coinTracker.push = push;
     w.coinTracker.forEach(push);
+    w.coinTracker.push({ event: 'ping' });
     return w.coinTracker;
 }
 var w = window;

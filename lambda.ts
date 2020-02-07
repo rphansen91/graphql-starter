@@ -8,12 +8,14 @@ import get from 'lodash/get';
 import { getApolloContext, IContext } from './src/context';
 import stopwatch from './src/utils/stopwatch';
 import { ObjectID } from 'mongodb';
+import nodeFetch from 'node-fetch';
 
 interface RequestParams {
   id: string;
+  url: string;
 }
 
-export const eventScript = (
+export const eventScript = async (
   event: APIGatewayProxyEvent,
   context: Context,
   callback: APIGatewayProxyCallback,
@@ -21,13 +23,33 @@ export const eventScript = (
   callback(null, sendEventScript());
 };
 
-export const eventScriptMap = (
-  event: APIGatewayProxyEvent,
-  context: Context,
-  callback: APIGatewayProxyCallback,
-) => {
-  callback(null, sendEventScriptMap());
-};
+export const eventPing = handleRequest(
+  async ({ url }, { trackerImplementations }) => {
+    const date = new Date();
+    const trackTime = stopwatch();
+    const { host } = getLocation(url);
+    console.log(url, host, date);
+    await trackerImplementations.updateOne(
+      {
+        url: host,
+      },
+      {
+        $set: {
+          url: host,
+          implemented: true,
+          updatedTime: date,
+        },
+        $setOnInsert: {
+          createdTime: date,
+        },
+      },
+      { upsert: true },
+    );
+    console.log('Updated tracker implementation', trackTime());
+    return { statusCode: 200, body: JSON.stringify({ success: true }) };
+  },
+  () => ({ statusCode: 200, body: JSON.stringify({ success: false }) }),
+);
 
 export const advancedDropOptIn = handleRequest(
   async ({ id }, { coinDropsAdvancedOptIn }) => {
@@ -119,12 +141,18 @@ function handleRequest(
   };
 }
 
-function withRequestParams(event: APIGatewayProxyEvent): { id: string } {
+function withRequestParams(event: APIGatewayProxyEvent): RequestParams {
   const id =
-    (get(event, 'queryStringParameters.id') as string) ||
-    (get(event, 'pathParameters.id') as string);
+    get(event, 'queryStringParameters.id') ||
+    get(event, 'pathParameters.id') ||
+    '';
+  const url =
+    get(event, 'queryStringParameters.url') ||
+    get(event, 'pathParameters.url') ||
+    '';
   return {
     id,
+    url,
   };
 }
 
@@ -168,17 +196,6 @@ function sendEventScript(): APIGatewayProxyResult {
       'Content-Type': 'application/javascript',
     },
     body: require('./sdk/events').default,
-  };
-}
-
-function sendEventScriptMap(): APIGatewayProxyResult {
-  return {
-    statusCode: 200,
-    headers: {
-      'Cache-Control': 'public, max-age=7200',
-      'Content-Type': 'application/javascript',
-    },
-    body: require('./sdk/events.js.map').default,
   };
 }
 

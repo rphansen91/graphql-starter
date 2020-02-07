@@ -21,12 +21,21 @@ functions:
           method: any
           cors:
             origin: "*"
-  eventScriptMap:
-    handler: lambda.eventScriptMap
+  eventPing:
+    handler: lambda.eventPing
     events:
       - http:
-          path: /events.js.map
-          method: any
+          path: /ping
+          method: GET
+          cors:
+            origin: "*"
+      - http:
+          path: /ping/{url}
+          method: GET
+          request:
+            parameters:
+              paths:
+                url: true
           cors:
             origin: "*"
   dropRedirect:

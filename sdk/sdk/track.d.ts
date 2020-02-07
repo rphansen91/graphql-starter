@@ -1,5 +1,5 @@
 import { IDropOptions, ILogger } from './interfaces';
-export declare function makeTrackEvent({ d, apiUri, logger, }: {
+export declare function makeTrackEvent({ w, d, apiUri, logger, }: {
     w: typeof window;
     d: typeof document;
     apiUri: string;

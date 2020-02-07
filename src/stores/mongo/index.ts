@@ -12,6 +12,7 @@ export function makeMongoStore(db: Db) {
     coinDrops: db.collection('coin_drops'),
     coinDropsAdvanced: db.collection('coin_drops_advanced'),
     coinDropsAdvancedOptIn: db.collection('coin_drops_advanced_opt_in'),
+    trackerImplementations: db.collection('tracker_implementations'),
   };
 }
 

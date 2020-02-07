@@ -1,6 +1,7 @@
 import { IDropOptions, ILogger } from './interfaces';
 
 export function makeTrackEvent({
+  w,
   d,
   apiUri,
   logger,
@@ -28,6 +29,10 @@ export function makeTrackEvent({
     appendChild(img);
   }
 
+  function addPingPixel(opts: IDropOptions) {
+    appendImgPixel(`${apiUri}/ping?url=${w.location.href}`);
+  }
+
   function addLinkClickPixel(opts: IDropOptions) {
     if (opts.drop_id) {
       appendImgPixel(`${apiUri}/drop/click/${opts.drop_id}`);
@@ -44,6 +49,8 @@ export function makeTrackEvent({
     if (!opts) return;
     logger('Track event', opts);
     switch (opts && opts.event) {
+      case 'ping':
+        return addPingPixel(opts);
       case 'click':
         return addLinkClickPixel(opts);
       case 'convert':
