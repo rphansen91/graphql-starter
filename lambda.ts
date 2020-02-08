@@ -12,6 +12,7 @@ import { ObjectID } from 'mongodb';
 interface RequestParams {
   id: string;
   url: string;
+  token: string;
 }
 
 export const eventScript = async (
@@ -67,7 +68,7 @@ export const advancedDropOptIn = handleRequest(
 );
 
 export const dropRedirect = handleRequest(
-  async ({ id }, { withIdFilter, coinDrops }) => {
+  async ({ id, token }, { withIdFilter, coinDrops }) => {
     console.log('Click redirect', { id });
     const trackTime = stopwatch();
     const { value } = await coinDrops.findOneAndUpdate(
@@ -84,8 +85,11 @@ export const dropRedirect = handleRequest(
     console.log('Drop redirect', value);
     const location = withRedirectLink(id, value);
     const { host, hostname } = getLocation(location);
-    console.log({ host, hostname });
     const cookie = withRedirectCookie(id);
+    console.log({ host, hostname });
+    if (token && (hostname || '').indexOf('coinapp.co') !== -1) {
+      return sendRedirect(`${location}&token=${token}`, cookie);
+    }
     return sendRedirect(location, cookie);
   },
   () => sendRedirect(),
@@ -149,9 +153,14 @@ function withRequestParams(event: APIGatewayProxyEvent): RequestParams {
     get(event, 'queryStringParameters.url') ||
     get(event, 'pathParameters.url') ||
     '';
+  const token =
+    get(event, 'queryStringParameters.token') ||
+    get(event, 'pathParameters.token') ||
+    '';
   return {
     id,
     url,
+    token,
   };
 }
 
