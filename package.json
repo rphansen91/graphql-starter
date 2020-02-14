@@ -18,7 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^2.7.1",
-    "aws-lambda": "^0.1.2",
+    "aws-lambda": "^1.0.5",
     "graphql": "^14.4.2",
     "graphql-middleware": "^3.0.2",
     "lodash": "^4.17.15",
